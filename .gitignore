@@ -11,3 +11,9 @@
 .rspec_status
 .idea/vcs.xml
 Gemfile.lock
+/.idea/workspace.xml
+/.idea/git_cleaner.iml
+
+\.idea/
+
+*.gem
