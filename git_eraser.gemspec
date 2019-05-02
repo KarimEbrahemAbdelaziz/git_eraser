@@ -1,16 +1,16 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "git_cleaner/version"
+require "git_eraser/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "git_cleaner"
-  spec.version       = GitCleaner::VERSION
+  spec.name          = "git_eraser"
+  spec.version       = GitEraser::VERSION
   spec.authors       = ["KarimEbrahem"]
   spec.email         = ["karimabdelazizmansour@gmail.com"]
 
-  spec.summary = 'git_cleaner is used to help you in cleaning your git branches.'
-  spec.description = 'git_cleaner is used to help you in cleaning your branches.'
-  spec.homepage      = "https://github.com/KarimEbrahemAbdelaziz/git_cleaner"
+  spec.summary = 'git_eraser is used to help you in cleaning your git branches.'
+  spec.description = 'git_eraser is used to help you in cleaning your branches.'
+  spec.homepage      = "https://github.com/KarimEbrahemAbdelaziz/git_eraser"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = "https://RubyGems.org"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/KarimEbrahemAbdelaziz/git_cleaner"
-    spec.metadata["changelog_uri"] = "https://github.com/KarimEbrahemAbdelaziz/git_cleaner"
+    spec.metadata["source_code_uri"] = "https://github.com/KarimEbrahemAbdelaziz/git_eraser"
+    spec.metadata["changelog_uri"] = "https://github.com/KarimEbrahemAbdelaziz/git_eraser"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   # end
   spec.files = Dir.glob("{bin,lib}/**/*")
   spec.bindir        = "exe"
-  spec.executables   = ["git_cleaner"]
+  spec.executables   = ["git_eraser"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "thor", "~> 0.20.3"

@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-
-require "git_cleaner"
-require "thor"
-
-GitCleaner::Cleaner.start(ARGV)

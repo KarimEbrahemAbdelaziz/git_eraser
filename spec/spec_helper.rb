@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "git_cleaner"
+require "git_eraser"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -1,6 +1,6 @@
-RSpec.describe GitCleaner do
+RSpec.describe GitEraser do
   it "has a version number" do
-    expect(GitCleaner::VERSION).not_to be nil
+    expect(GitEraser::VERSION).not_to be nil
   end
 
   it "does something useful" do

@@ -1,21 +1,21 @@
-require "git_cleaner/version"
+require "git_eraser/version"
 require "thor"
 require "highline"
 require "rainbow"
 require "httpclient"
 require "git"
 
-module GitCleaner
+module GitEraser
   class Error < StandardError; end
 
-  class Cleaner < Thor
+  class Eraser < Thor
 
-    desc 'cleanup', 'Clean git branches that had been merged into master'
+    desc 'erase', 'Erase git branches that had been merged into master'
     option :local
     option :origin
-    def cleanup
-      cleanup_local if options[:local]
-      cleanup_origin if options[:origin]
+    def erase
+      erase_local if options[:local]
+      erase_origin if options[:origin]
       Helper.new.print_no_flag_error_message if options.empty?
     end
 
@@ -75,7 +75,7 @@ module GitCleaner
     end
 
     no_commands do
-      def cleanup_local
+      def erase_local
         current_directory = Dir.pwd
 
         Helper.new.print_cleanup_message
@@ -114,7 +114,7 @@ module GitCleaner
     end
 
     no_commands do
-      def cleanup_origin
+      def erase_origin
         current_directory = Dir.pwd
 
         Helper.new.print_cleanup_message
@@ -187,57 +187,57 @@ module GitCleaner
   class Helper
     def print_cleanup_message
       text2 = "
-   _____ _ _      _____ _
-  / ____(_) |    / ____| |
- | |  __ _| |_  | |    | | ___  __ _ _ __   ___ _ __
- | | |_ | | __| | |    | |/ _ \\/ _` | '_ \\ / _ \\ '__|
- | |__| | | |_  | |____| |  __/ (_| | | | |  __/ |
-  \\_____|_|\\__|  \\_____|_|\\___|\\__,_|_| |_|\\___|_|
+   _____ _ _     ______
+  / ____(_) |   |  ____|
+ | |  __ _| |_  | |__   _ __ __ _ ___  ___ _ __
+ | | |_ | | __| |  __| | '__/ _` / __|/ _ \\ '__|
+ | |__| | | |_  | |____| | | (_| \\__ \\  __/ |
+  \\_____|_|\\__| |______|_|  \\__,_|___/\\___|_|
 "
       puts "#{text2} \n"
-      puts "Welcome to the #{Rainbow("Git Cleaner").underline.bright.red} 🧹🧹 project!
+      puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project!
 Before we start cleaning your git branches, here is a preview of your branches: \n\n"
     end
 
     def print_preview_message(git_type)
       text2 = "
-   _____ _ _      _____ _
-  / ____(_) |    / ____| |
- | |  __ _| |_  | |    | | ___  __ _ _ __   ___ _ __
- | | |_ | | __| | |    | |/ _ \\/ _` | '_ \\ / _ \\ '__|
- | |__| | | |_  | |____| |  __/ (_| | | | |  __/ |
-  \\_____|_|\\__|  \\_____|_|\\___|\\__,_|_| |_|\\___|_|
+   _____ _ _     ______
+  / ____(_) |   |  ____|
+ | |  __ _| |_  | |__   _ __ __ _ ___  ___ _ __
+ | | |_ | | __| |  __| | '__/ _` / __|/ _ \\ '__|
+ | |__| | | |_  | |____| | | (_| \\__ \\  __/ |
+  \\_____|_|\\__| |______|_|  \\__,_|___/\\___|_|
 "
       puts "#{text2} \n"
-      puts "Welcome to the #{Rainbow("Git Cleaner").underline.bright.red} 🧹🧹 project!
+      puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project!
 Here is a preview of your #{git_type} branches: \n\n"
     end
 
     def print_no_git_error_message
       text2 = "
-   _____ _ _      _____ _
-  / ____(_) |    / ____| |
- | |  __ _| |_  | |    | | ___  __ _ _ __   ___ _ __
- | | |_ | | __| | |    | |/ _ \\/ _` | '_ \\ / _ \\ '__|
- | |__| | | |_  | |____| |  __/ (_| | | | |  __/ |
-  \\_____|_|\\__|  \\_____|_|\\___|\\__,_|_| |_|\\___|_|
+   _____ _ _     ______
+  / ____(_) |   |  ____|
+ | |  __ _| |_  | |__   _ __ __ _ ___  ___ _ __
+ | | |_ | | __| |  __| | '__/ _` / __|/ _ \\ '__|
+ | |__| | | |_  | |____| | | (_| \\__ \\  __/ |
+  \\_____|_|\\__| |______|_|  \\__,_|___/\\___|_|
 "
       puts "#{text2} \n"
-      puts "Welcome to the #{Rainbow("Git Cleaner").underline.bright.red} 🧹🧹 project! \n\n"
+      puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project! \n\n"
       puts "⚠️⚠️ There is no #{Rainbow("git").underline.bright.red} directory here 😡 \n\n"
     end
 
     def print_no_flag_error_message
       text2 = "
-   _____ _ _      _____ _
-  / ____(_) |    / ____| |
- | |  __ _| |_  | |    | | ___  __ _ _ __   ___ _ __
- | | |_ | | __| | |    | |/ _ \\/ _` | '_ \\ / _ \\ '__|
- | |__| | | |_  | |____| |  __/ (_| | | | |  __/ |
-  \\_____|_|\\__|  \\_____|_|\\___|\\__,_|_| |_|\\___|_|
+   _____ _ _     ______
+  / ____(_) |   |  ____|
+ | |  __ _| |_  | |__   _ __ __ _ ___  ___ _ __
+ | | |_ | | __| |  __| | '__/ _` / __|/ _ \\ '__|
+ | |__| | | |_  | |____| | | (_| \\__ \\  __/ |
+  \\_____|_|\\__| |______|_|  \\__,_|___/\\___|_|
 "
       puts "#{text2} \n"
-      puts "Welcome to the #{Rainbow("Git Cleaner").underline.bright.red} 🧹🧹 project! \n\n"
+      puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project! \n\n"
       puts "⚠️⚠️ You didn't specify any flag, please use --local or --origin flag 😡 \n\n"
     end
   end

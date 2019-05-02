@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "git_eraser"
+require "thor"
+
+GitEraser::Eraser.start(ARGV)
