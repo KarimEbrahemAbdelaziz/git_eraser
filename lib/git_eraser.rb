@@ -4,6 +4,7 @@ require "highline"
 require "rainbow"
 require "httpclient"
 require "git"
+require 'whirly'
 
 module GitEraser
   class Error < StandardError; end
@@ -44,7 +45,7 @@ module GitEraser
             puts "    🧹 #{index + 1}. #{local_branch}"
           end
 
-          puts "\n\n"
+          puts "\n"
         rescue
           Helper.new.print_no_git_error_message
         end
@@ -67,7 +68,7 @@ module GitEraser
             puts "    🧹 #{index + 1}. #{origin_branch}"
           end
 
-          puts "\n\n"
+          puts "\n"
         rescue
           Helper.new.print_no_git_error_message
         end
@@ -86,12 +87,12 @@ module GitEraser
             puts "    🧹 #{index + 1}. #{local_branch}"
           end
 
-          puts "\n\n"
+          puts "\n"
 
           inputStream = HighLine.new
           should_delete_branches = inputStream.agree("Delete these branches? (y/n) ")
           if should_delete_branches == true
-            puts "\n\n"
+            puts "\n"
             g.checkout('master')
             g.branches.local.each_with_index do |local_branch, index|
               begin
@@ -105,8 +106,9 @@ module GitEraser
                 puts "    #{index + 1}. Can't remove '#{local_branch}' ❌"
               end
             end
+            puts "\n#{Rainbow("All local branches that merged to master had been deleted successfuly").underline.bright.green} 🎉🎉"
           end
-          puts "\n\n"
+          puts "\n"
         rescue
           Helper.new.print_no_git_error_message
         end
@@ -125,38 +127,42 @@ module GitEraser
             puts "    🧹 #{index + 1}. #{origin_branch}"
           end
 
-          puts "\n\n"
+          puts "\n"
 
           inputStream = HighLine.new
           should_delete_branches = inputStream.agree("Delete these branches? (y/n) ")
 
           if should_delete_branches == true
-            puts "\n\n"
-            g.checkout('master')
-            g.pull('origin', 'master')
-            array_of_remote_deleted_branches = []
-            g.branches.remote.each_with_index do |origin_branch, index|
-              begin
-                branch_string = origin_branch.to_s
-                branch_string['remotes/origin/'] = ''
-                g.checkout(branch_string)
-                if g.branch('master').contains?(branch_string) && branch_string != 'master'
-                  system "git push -u origin --delete #{branch_string} -q"
-                  puts "    #{index + 1}. '#{origin_branch}' Removed ✅"
-                  array_of_remote_deleted_branches.append(branch_string)
-                elsif branch_string == 'master'
-                  puts "    #{index + 1}. '#{origin_branch}' Can't remove 'master' branch ❌"
-                else
-                  puts "    #{index + 1}. '#{origin_branch}' Not merged into 'master' ❌"
+            puts "\n"
+            Whirly.start do
+              Whirly.status = "Deleting Origin Branches..."
+              g.checkout('master')
+              g.pull('origin', 'master')
+              array_of_remote_deleted_branches = []
+              g.branches.remote.each_with_index do |origin_branch, index|
+                begin
+                  branch_string = origin_branch.to_s
+                  branch_string['remotes/origin/'] = ''
+                  g.checkout(branch_string)
+                  if g.branch('master').contains?(branch_string) && branch_string != 'master'
+                    system "git push -u origin --delete #{branch_string} -q"
+                    puts "    #{index + 1}. '#{origin_branch}' Removed ✅"
+                    array_of_remote_deleted_branches.append(branch_string)
+                  elsif branch_string == 'master'
+                    puts "    #{index + 1}. '#{origin_branch}' Can't remove 'master' branch ❌"
+                  else
+                    puts "    #{index + 1}. '#{origin_branch}' Not merged into 'master' ❌"
+                  end
+                rescue
+                  puts "    #{index + 1}. Can't remove '#{origin_branch}' ❌"
                 end
-              rescue
-                puts "    #{index + 1}. Can't remove '#{origin_branch}' ❌"
               end
+              g.checkout('master')
+              delete_local_after_origin(array_of_remote_deleted_branches)
+              puts "\n#{Rainbow("All origin branches that merged to master had been deleted successfuly").underline.bright.green} 🎉🎉"
             end
-            g.checkout('master')
-            delete_local_after_origin(array_of_remote_deleted_branches)
           end
-          puts "\n\n"
+          puts "\n"
         rescue
           Helper.new.print_no_git_error_message
         end
@@ -169,9 +175,9 @@ module GitEraser
         begin
           g = Git.open("#{current_directory}")
           g.branches.local.each do |local_branch|
-            puts "Local: #{local_branch}"
+            # puts "Local: #{local_branch}"
             branches.each do |value|
-              puts "coming: #{value}"
+              # puts "coming: #{value}"
               if local_branch.to_s == value
                 local_branch.delete
               end
@@ -224,7 +230,7 @@ Here is a preview of your #{git_type} branches: \n\n"
 "
       puts "#{text2} \n"
       puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project! \n\n"
-      puts "⚠️⚠️ There is no #{Rainbow("git").underline.bright.red} directory here 😡 \n\n"
+      puts "⚠️⚠️ There is no #{Rainbow("git").underline.bright.red} directory here 😡 \n"
     end
 
     def print_no_flag_error_message
@@ -238,7 +244,7 @@ Here is a preview of your #{git_type} branches: \n\n"
 "
       puts "#{text2} \n"
       puts "Welcome to the #{Rainbow("Git Eraser").underline.bright.red} 🧹🧹 project! \n\n"
-      puts "⚠️⚠️ You didn't specify any flag, please use --local or --origin flag 😡 \n\n"
+      puts "⚠️⚠️ You didn't specify any flag, please use --local or --origin flag 😡 \n"
     end
   end
 
