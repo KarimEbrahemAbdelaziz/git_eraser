@@ -15,5 +15,3 @@ Gemfile.lock
 /.idea/git_cleaner.iml
 
 \.idea/
-
-*.gem
