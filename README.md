@@ -21,12 +21,12 @@ Execute this command:
 * Write this command to preview local branches: (Change --local to --origin to preview origin branches)
 
 
-    $ git_cleaner preview --local
+    $ git_eraser preview --local
     
 * Write this command to delete local branches:  (Change --local to --origin to delete origin branches) (*NOTE:* This command will delete all branches except master just for now)
 
 
-    $ git_cleaner erase --local
+    $ git_eraser erase --local
     
 ## Contributing
 
